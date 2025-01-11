@@ -10,7 +10,7 @@ source:
   sha256: 00ad6a32f89fe64760b70b9424af19b88d671673a66424d59d80cfa97deb75d3
 
 build:
-  number: 0
+  number: 1
   script:
     - make build
     - go-licenses save . --save_path license-files
