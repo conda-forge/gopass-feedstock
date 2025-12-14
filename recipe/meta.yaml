@@ -1,5 +1,5 @@
 {% set name = "gopass" %}
-{% set version = "1.16.0" %}
+{% set version = "1.16.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/gopasspw/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: c7e6c5688c19765a740b9617eb4034c85645a80aa9c693d713869071d5c023a9
+  sha256: 33451a782b66266c59560a5ec7f4e34c104c501a36b445fc574fad71e3b3d884
 
 build:
   number: 0
