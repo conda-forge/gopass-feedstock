@@ -12,8 +12,13 @@ source:
 build:
   number: 0
   script:
-    - make build
-    - go-licenses save . --save_path license-files
+    # `|| exit 1` is required on every line but the last: cmd.exe otherwise only
+    # reports the last command's exit code and a failing build looks green.
+    - make build || exit 1
+    # go-licenses misreads filippo.io/nistec/internal/fiat's README as a
+    # BSD-1-Clause license file, a type it does not know about. The module's real
+    # LICENSE is still saved, via filippo.io/nistec itself.
+    - go-licenses save . --save_path license-files --ignore filippo.io/nistec/internal/fiat || exit 1
     - make install  # [unix]
     # Copy the executable under Windows (`make install` does not work)
     - COPY gopass "%LIBRARY_BIN%\gopass.exe"  # [win]
