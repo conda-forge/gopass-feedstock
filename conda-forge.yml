@@ -1,11 +1,7 @@
 bot:
   automerge: true
 
-build_platform:
-  osx_arm64: osx_64
-
-provider:
-  linux_aarch64: azure
+conda_build_tool: rattler-build
 
 conda_build:
   error_overlinking: true
@@ -16,4 +12,9 @@ github:
   branch_name: main
   tooling_branch_name: main
 
-test: native_and_emulated
+# Both ARM targets build on native runners: linux_aarch64 on GitHub Actions'
+# ubuntu-24.04-arm, osx_arm64 on Azure's macOS-15-arm64. No emulation, no
+# cross-compilation, so every package is also tested where it is built.
+provider:
+  linux_aarch64: native
+  osx_arm64: native
