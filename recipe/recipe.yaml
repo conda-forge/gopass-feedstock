@@ -21,9 +21,13 @@ build:
     - go-licenses save . --save_path license-files --ignore filippo.io/nistec/internal/fiat
     - if: unix
       then: make install
-    # Copy the executable under Windows (`make install` does not work)
+    # `make install` needs unix `install`, so place the executable by hand on
+    # Windows. rattler-build, unlike conda-build, does not pre-create the
+    # prefix layout, so the target directory has to be made first.
     - if: win
-      then: COPY gopass "%LIBRARY_BIN%\gopass.exe"
+      then:
+        - if not exist "%PREFIX%\Library\bin" mkdir "%PREFIX%\Library\bin"
+        - copy gopass "%PREFIX%\Library\bin\gopass.exe"
     # Clear out cache to avoid file not removable warnings
     - if: unix
       then: chmod -R u+w $(go env GOPATH) && rm -r $(go env GOPATH)
