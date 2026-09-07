@@ -1,0 +1,55 @@
+schema_version: 1
+
+context:
+  version: "1.17.0"
+
+package:
+  name: gopass
+  version: ${{ version }}
+
+source:
+  url: https://github.com/gopasspw/gopass/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: ce004c82b65ffac44de2991020843828b38bb510909506f2fa0f40bec05b7c75
+
+build:
+  number: 0
+  script:
+    - make build
+    # go-licenses misreads filippo.io/nistec/internal/fiat's README as a
+    # BSD-1-Clause license file, a type it does not know about. The module's
+    # real LICENSE is still saved, via filippo.io/nistec itself.
+    - go-licenses save . --save_path license-files --ignore filippo.io/nistec/internal/fiat
+    - if: unix
+      then: make install
+    # `make install` needs unix `install`, so place the executable by hand on
+    # Windows. rattler-build, unlike conda-build, does not pre-create the
+    # prefix layout, so the target directory has to be made first.
+    - if: win
+      then:
+        - if not exist "%PREFIX%\Library\bin" mkdir "%PREFIX%\Library\bin"
+        - copy gopass "%PREFIX%\Library\bin\gopass.exe"
+    # Clear out cache to avoid file not removable warnings
+    - if: unix
+      then: chmod -R u+w $(go env GOPATH) && rm -r $(go env GOPATH)
+
+requirements:
+  build:
+    - ${{ compiler('go-nocgo') }}
+    - go-licenses
+    - make
+
+tests:
+  - script: gopass --help
+
+about:
+  homepage: https://www.gopass.pw
+  license: MIT
+  license_file:
+    - LICENSE
+    - license-files/**
+  summary: The slightly more awesome standard unix password manager for teams.
+  repository: https://github.com/gopasspw/gopass
+
+extra:
+  recipe-maintainers:
+    - anjos
