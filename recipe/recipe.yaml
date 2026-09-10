@@ -1,7 +1,7 @@
 schema_version: 1
 
 context:
-  version: "1.17.1"
+  version: "1.17.2"
 
 package:
   name: gopass
@@ -9,7 +9,7 @@ package:
 
 source:
   url: https://github.com/gopasspw/gopass/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: f8fc2243f6ae83da3b483a86a81e675d4eb4bc2a970dbb89890adb2d756733c5
+  sha256: 27a2fd9039d535282b3fb9160644dea97366c7c4e4d3dccc2706e20732b7ad67
 
 build:
   number: 0
